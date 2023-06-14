@@ -1,56 +1,51 @@
 import { fetchBreeds } from 'api';
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { ErrorMessage } from './ErorrMessage';
 import { HTTP_ERR_MSG } from 'constants';
 
-export class BreedSelect extends Component {
-  abortCtrl;
+export const BreedSelect = ({ onSelect }) => {
+  const [breeds, setBreeds] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  state = {
-    breeds: [],
-    loading: false,
-    error: null,
-  };
+  useEffect(() => {
+    const abortCtrl = new AbortController();
 
-  async componentDidMount() {
-    try {
-      this.abortCtrl = new AbortController();
-      this.setState({ loading: true, error: null });
-      const fetchedBreeds = await fetchBreeds(this.abortCtrl);
-      this.setState({ breeds: fetchedBreeds });
-    } catch (error) {
-      if (error.code !== 'ERR_CANCELED') {
-        this.setState({ error: HTTP_ERR_MSG });
+    async function getBreeds() {
+      try {
+        setLoading(true);
+        setError(null);
+        const fetchedBreeds = await fetchBreeds(abortCtrl.signal);
+        setBreeds(fetchedBreeds);
+      } catch (error) {
+        if (error.code !== 'ERR_CANCELED') {
+          setError(HTTP_ERR_MSG);
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      this.setState({ loading: false });
     }
-  }
+    getBreeds();
 
-  componentWillUnmount() {
-    this.abortCtrl.abort();
-  }
+    return () => abortCtrl.abort();
+  }, []);
 
-  render() {
-    const { onSelect } = this.props;
-    const { breeds, loading, error } = this.state;
-    const options = breeds.map(breed => {
-      return {
-        value: breed.id,
-        label: breed.name,
-      };
-    });
+  const options = breeds.map(breed => {
+    return {
+      value: breed.id,
+      label: breed.name,
+    };
+  });
 
-    return (
-      <div>
-        <Select
-          options={options}
-          isLoading={loading}
-          onChange={option => onSelect(option.value)}
-        />
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Select
+        options={options}
+        isLoading={loading}
+        onChange={option => onSelect(option.value)}
+      />
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+    </div>
+  );
+};
