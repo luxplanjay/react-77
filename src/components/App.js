@@ -1,15 +1,9 @@
-// import { SkipMountEffect } from './SkipMountEffect';
-// import { StateInit } from './StateInit';
-// import { UseRef } from './UseRef';
-import { UseMemo } from './UseMemo';
+import { Account } from './Account';
 
 export const App = () => {
   return (
     <>
-      {/* <SkipMountEffect /> */}
-      {/* <StateInit /> */}
-      {/* <UseRef /> */}
-      <UseMemo />
+      <Account />
     </>
   );
 };
