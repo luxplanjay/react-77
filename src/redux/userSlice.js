@@ -1,3 +1,9 @@
-export const userReducer = (state = {}, action) => {
-  return state;
-};
+import { createSlice } from '@reduxjs/toolkit';
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {},
+  reducers: {},
+});
+
+export const userReducer = userSlice.reducer;
