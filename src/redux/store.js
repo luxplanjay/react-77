@@ -37,6 +37,15 @@ const googleMiddleware = store => next => action => {
   next(action);
 };
 
+const thunkMiddleware = store => next => action => {
+  if (typeof action === 'function') {
+    action(store.dispatch);
+    return;
+  }
+
+  next(action);
+};
+
 export const store = configureStore({
   reducer: {
     user: userReducer,
