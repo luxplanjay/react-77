@@ -23,7 +23,7 @@ https://roadmap.sh/
   - https://youtu.be/4-SOv7eTfoQ
   - https://youtu.be/Egg8jH0Yj14
 - https://react-hook-form.com/
-- https://storybook.js.org/
+- https://storybook.js.org/ (https://youtu.be/qogIildW4jk)
 - https://tailwindcss.com/
 
 ### Библиотеки компонент
